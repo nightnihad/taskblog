@@ -24,7 +24,7 @@ class Article(models.Model):
     subject = models.TextField(max_length=100000)
     category  = models.ManyToManyField(Category)
     likes = models.BigIntegerField(default=0)
-    created = models.DateTimeField(auto_now_add=True, editable=False,null=True, blank=True) 
+    created = models.DateTimeField(auto_now_add=True,null=True) 
     updated = models.DateTimeField(default=None, editable=True,null=True, blank=True)
     
     def __str__(self):
@@ -36,7 +36,7 @@ class Comments(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     subject = models.TextField(max_length=10000)
     time = models.DateTimeField(auto_now_add=True,editable=False,null=True,blank=True)
-    article = models.ForeignKey(Article,on_delete=models.CASCADE)
+    article = models.ForeignKey(Article,on_delete=models.CASCADE,related_name='comments')
     likes = models.BigIntegerField(default=0)
     
     def __str__(self):
@@ -44,7 +44,6 @@ class Comments(models.Model):
 
 class About(models.Model):
     subject = models.TextField(max_length=10000)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
     
     def __str__(self):
         return 'Haqqimizda'

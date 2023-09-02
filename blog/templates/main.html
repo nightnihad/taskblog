@@ -9,35 +9,74 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark  ">
+  {% load crispy_forms_tags %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary  ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="{% url 'homepage' %}">Ana səhifə</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Blog Yaz</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'create_article'%}">Meqale yaz</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="#">Haqqimizda</a>
+          <a class="nav-link active" href="{% url 'about'%}">Haqqimizda</a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link active" href="#">Elaqe</a>
+          <a class="nav-link active" href="{% url 'contact' %}">Elaqe</a>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item ">
+              <a class="nav-link active" href="{% url 'logout' %}">Çıxış</a>
+              {% else %}
+              <li class="nav-item ">
+                <a class="nav-link active" href="{% url 'login' %}">Giriş</a>
+                <li class="nav-item ">
+                  <a class="nav-link active" href="{% url 'register' %}">Qeydiyyat</a>
+            {% endif %}
+            <li class="nav-item ">
+              <a class="nav-link active" href="{% url 'categories' %}">Kateqoriyalar</a>
         </li>
 
       </ul>
     </div>
   </div>
+  <div class ="row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <form>
+                 {% csrf_token %} 
+                <input type="text" name = "keyword" class="input-sm" maxlength="64" placeholder="Ara...">
+              <button type="submit" class="btn btn-danger">Ara</button>
+            </form>
+      </div>
+    </div>
+
+</div>
   
 </nav>
 
     {% block body %}
-    <ul class="list-group">
-      <li class="list-group-item">Nomre: xxx-xxx-xx-xx</li>
-      <li class="list-group-item">Adres: Celilabad</li>
+{% for articles in article %}
+  <div class="container p-5 my-5 bg-warning text-white">
+
+      <ul class="list-group">
+      <li class="list-group-item">Yazar: {{articles.author.username}}</li>
+      <li class="list-group-item">Yaranma Tarixi: {{articles.created}}</li>
+    
+      <li class="list-group-item">Basliq: {{articles.title}}</li>
+      <li class="list-group-item"><a href ="{% url 'article' articles.id %}"class="section_load_more">Detal</a></li>
+      <hr>
+
+      
+
+
     </ul>
+  </div>
+
+
+  {% endfor %}
     {% endblock body %}
 </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

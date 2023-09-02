@@ -1,8 +1,39 @@
 {% extends "main.html" %}
-
-
+{% load crispy_forms_tags %}
 {% block body %} 
-{% for  articles in article %}
-{{articles.title}}
+
+<div class="container p-5 my-5 bg-info text-white">
+
+Basliq: {{article.title}}
+<hr>
+Kontent: {{article.subject}}
+<hr>
+Like Sayi: {{article.likes}}
+<hr>
+Commentler:
+<br>
+{% for comment in  comments %}
+{{comment.subject}}
+<a href="{% url  'delete_comment' comment.id %}">commenti sil</a>
+<hr>
 {% endfor %}
-{% endblock body %}
+</div>
+
+{% if not request.user.is_authenticated %}
+<a href="{% url  'to_like' article.id %}" class="btn btn-primary">like et</a>
+
+{% else %}
+Komment Elave Et
+<form action="{% url 'detail_article' article.id %}"  method="post">
+    {% csrf_token %}
+    {{form|crispy}} 
+    <button type="submit" class="btn btn-success">Ekle</button>
+</form>
+<a href="{% url  'delete_article' article.id %}" class="btn btn-danger">meqaleni sil</a>
+<br>
+<a href="{% url  'to_like' article.id %}" class="btn btn-primary">like et</a>
+
+{% endif %}
+
+
+    {% endblock body %}

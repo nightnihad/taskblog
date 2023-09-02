@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+{% block body %} 
+{% for article in articles %}
+    {{article.title}}
+    {{article.likes}}
+    a
+
+{% comment %} <a href="{% url  'to_like' articles.id %}">like et</a> {% endcomment %}
+{% endfor %}
+{% endblock body %}

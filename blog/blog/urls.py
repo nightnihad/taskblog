@@ -21,5 +21,17 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.main_page,name='homepage'),
-    path('article/<int:id>',views.index),
+    path('detail_article/<int:id>',views.to_comment,name = 'detail_article'),
+    path('article/<int:id>',views.index,name = 'article'),
+    path('to_like/<int:id>',views.to_like,name = 'to_like'),
+    path('delete_comment/<int:id>',views.delete_comment,name ='delete_comment'),
+    path('delete_article/<int:id>',views.delete_article,name ='delete_article'),
+    path('get_category/<int:id>',views.get_category,name='get_category'),
+    path('categories/',views.categories,name='categories'),
+    path('create_article/',views.create_article,name = 'create_article'),
+    path('register/',views.register,name = 'register'),
+    path('logout/',views.logout_user,name = 'logout'),
+    path('about/',views.about,name = 'about'),
+    path('contact',views.contact_us,name = 'contact'),
+    path('login/',views.login,name = 'login')
 ]

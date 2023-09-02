@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% block body %}
+{% for category in categories %}
+{{category.name}}
+<li class="list-group-item">Basliq: {{category.name}}</li>
+<li class="list-group-item"><a href ="{% url 'get_category' category.id %}"class="section_load_more">Bu categoriyanin meqalaleleri
+</a></li>
+
+{% endfor %}
+{% endblock body %}
