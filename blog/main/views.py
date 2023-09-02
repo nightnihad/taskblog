@@ -25,7 +25,7 @@ def categories(request):
     context = {'categories':categories}
     return render(request,'category.html',context)
 
-
+# cateqoriyalar uygun meqaleler yukleyen funksiya, sadece olaraq articles valuable olaraq bos cixir deye funksiyada kronik bir xeta var
 def get_category(request,id):
     # category = Category.objects.filter(id=id)
     print(id)
@@ -36,7 +36,7 @@ def get_category(request,id):
     context = {'articles' : articles}
     return render(request,'category_detail.html',context)
 
-
+# meqalelere comment etmek ucun funksiya. commenti sadece istifadeciler yaza biler ve comment etdikden sonra article sehifesine yonlendirir
 def to_comment(request,id):
     if request.user.is_authenticated:
         article = get_object_or_404(Article,id=id)
@@ -53,7 +53,7 @@ def to_comment(request,id):
             
 
 
-
+# article index sehifesidir. burda articlelari silmek, comment etmek ucun form ve like etmek mumkundur
 def index(request,id):
     article = get_object_or_404(Article,id=id)
     form = CommentsForm()
@@ -64,7 +64,9 @@ def index(request,id):
         'comments':comments
     }
     return render(request,'article.html',context)
-#
+
+
+# artikl yazmaq ucun view
 def create_article(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -90,7 +92,8 @@ def create_article(request):
             return render(request,'create.html',{'ArticleForm':form})
     else:
         return  HttpResponse('Siz qeydiyyatdan kecmemisiz')
-
+    
+# artikllari like etmek ucun view. burda istenilen istifadeci olmayan sexsler bele like ede bilir
 def to_like(request,id):
         article = Article.objects.filter(id = id).first()
         if article is None:
@@ -98,6 +101,8 @@ def to_like(request,id):
         article.likes +=1
         article.save()
         return redirect('article',id)
+    
+# artikllari silmek ucun view
 def delete_article(request,id):
     article = get_object_or_404(Article,id=id)
     if request.user == article.author:
@@ -105,6 +110,8 @@ def delete_article(request,id):
         return redirect('/')
     else:
         return HttpResponse('siz bunu bilmersiz')
+
+# commentleri silmek ucun view
 def delete_comment(request,id):
     comment = get_object_or_404(Comments,id = id)
     if request.user == comment.author:
@@ -112,9 +119,13 @@ def delete_comment(request,id):
         return redirect('/')
     else:
         return HttpResponse('siz bu commenti sile bilmersiz')
+
+# esas sehifeye artikklari yerlesdirmek ucun view
 def main_page(request):
     article = Article.objects.all()
     return render(request,"main.html",{"article":article})
+
+# register sehifesi ucun view
 def register(request):
     form = UserCreationForm()
     if request.user.is_authenticated:
@@ -127,6 +138,8 @@ def register(request):
                 return redirect('login')
             return HttpResponse('duzgun qeydiyyatdan kecmemisiz')
     return render(request,'register.html',{'form':form})
+
+# login sehifesi ucun view
 @csrf_protect
 def login(request):
     form = LoginForm()
@@ -149,7 +162,7 @@ def login(request):
 
         return render(request,"login.html",{'form':form})
 
-
+# logout sehifesi ucun views
 @login_required(login_url="/")
 def logout_user(request):
     logout(request)
